@@ -27,6 +27,11 @@ class Payment
      */
     private $amount;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Command::class, inversedBy="payments")
+     */
+    private $command;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class Payment
     public function setAmount(int $amount): self
     {
         $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getCommand(): ?Command
+    {
+        return $this->command;
+    }
+
+    public function setCommand(?Command $command): self
+    {
+        $this->command = $command;
 
         return $this;
     }
