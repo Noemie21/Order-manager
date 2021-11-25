@@ -18,6 +18,7 @@
             <li><a href="/">home</a></li>
             {#{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}#}
                 <li> <a href="/company/1">Informations entreprise</a></li>
+                <li> <a href="/product/">Products</a></li>
                {# <li><a href="/logout">logout</a></li>
             {% else %}#}
                 <li> <a href="/login">login</a></li>
