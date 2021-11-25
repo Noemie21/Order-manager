@@ -32,6 +32,7 @@ class Payment
      */
     private $command;
 
+
     public function getId(): ?int
     {
         return $this->id;

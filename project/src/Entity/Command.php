@@ -6,6 +6,7 @@ use App\Repository\CommandRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @ORM\Entity(repositoryClass=CommandRepository::class)
@@ -50,14 +51,14 @@ class Command
     private $status;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="command")
-     */
-    private $products;
-
-    /**
      * @ORM\OneToMany(targetEntity=Payment::class, mappedBy="command")
      */
     private $payments;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Product::class)
+     */
+    private $products;
 
     public function __construct()
     {
@@ -143,36 +144,6 @@ class Command
     }
 
     /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setCommand($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getCommand() === $this) {
-                $product->setCommand(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Payment[]
      */
     public function getPayments(): Collection
@@ -200,5 +171,41 @@ class Command
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        $this->products->removeElement($product);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getTotal(): ?int
+    {
+        $total = 0;
+        foreach ($this->products as $product) {
+            $total += $product->getPrice();
+        }
+        return $total;
     }
 }
