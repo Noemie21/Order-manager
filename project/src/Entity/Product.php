@@ -27,11 +27,6 @@ class Product
      */
     private $price;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Command::class, inversedBy="products")
-     */
-    private $command;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -60,16 +55,8 @@ class Product
 
         return $this;
     }
-
-    public function getCommand(): ?Command
-    {
-        return $this->command;
-    }
-
-    public function setCommand(?Command $command): self
-    {
-        $this->command = $command;
-
-        return $this;
+    
+    public function __toString() {
+        return $this->name;
     }
 }
