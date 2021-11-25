@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Company{% endblock %}
+
+{% block body %}
+<h1>Informations entreprise</h1>
+    <img style="width: 100px; height: auto" src={{ images_directory ~ company.logo}}><br>
+    <h2>{{ company.name }}</h2>
+    <h2>{{ company.address }}</h2>
+
+    <a href="{{ path('company_edit', {'id': company.id}) }}">edit</a>
+
+{% endblock %}
