@@ -23,6 +23,17 @@ class CommandController extends AbstractController
         ]);
     }
 
+    #[Route('/untreated', name: 'command_untreated', methods: ['GET'])]
+    public function untreated(CommandRepository $commandRepository): Response
+    {
+            return $this->render('command/untreated.html.twig', [
+                'commands' => $commandRepository->findBy(
+                    ['status' => 'Non-traitée']
+                    
+                ),
+            ]);
+    }
+
     #[Route('/new', name: 'command_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

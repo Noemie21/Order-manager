@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Command untreated{% endblock %}
+
+{% block body %}
+    <h1>Command untreated</h1>
+
+        {% for command in commands %}
+        <br><br>
+        <li>
+            command :
+            {{ command.id }}
+            <br><br>
+
+
+        </li>
+
+        {% endfor %}
+
+    {# <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ commands.id }}</td>
+            </tr>
+            <tr>
+                <th>ClientFirstname</th>
+                <td>{{ commands.clientFirstname }}</td>
+            </tr>
+            <tr>
+                <th>ClientLastname</th>
+                <td>{{ commands.clientLastname }}</td>
+            </tr>
+            <tr>
+                <th>ClientAddress</th>
+                <td>{{ commands.clientAddress }}</td>
+            </tr>
+            <tr>
+                <th>ClientPhoneNumber</th>
+                <td>{{ commands.clientPhoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>DueDate</th>
+                <td>{{ commands.dueDate ? command.dueDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ commands.status }}</td>
+            </tr>
+        </tbody>
+    </table> #}
+{% endblock %}
