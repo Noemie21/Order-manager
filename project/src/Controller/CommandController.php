@@ -34,12 +34,34 @@ class CommandController extends AbstractController
             ]);
     }
 
+    #[Route('/late', name: 'command_late', methods: ['GET'])]
+    public function late(CommandRepository $commandRepository): Response
+    {
+            return $this->render('command/late.html.twig', [
+                'commands' => $commandRepository->findBy(
+                    ['status' => 'Retard']
+                    
+                ),
+            ]);
+    }
+
     #[Route('/treated', name: 'command_treated', methods: ['GET'])]
     public function treated(CommandRepository $commandRepository): Response
     {
             return $this->render('command/treated.html.twig', [
                 'commands' => $commandRepository->findBy(
                     ['status' => 'Traitée']
+                    
+                ),
+            ]);
+    }
+
+    #[Route('/paid', name: 'command_paid', methods: ['GET'])]
+    public function paid(CommandRepository $commandRepository): Response
+    {
+            return $this->render('command/paid.html.twig', [
+                'commands' => $commandRepository->findBy(
+                    ['status' => 'Payée']
                     
                 ),
             ]);
