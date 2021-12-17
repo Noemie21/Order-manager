@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
+        {% block stylesheets %}
+            {#{{ encore_entry_link_tags('app') }}#}
+        {% endblock %}
+
+        {% block javascripts %}
+            {#{{ encore_entry_script_tags('app') }}#}
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            <imgsrc={{ images_directory ~ company.logo}}><br>
+            <div>
+                <p>Invoice #: {{ command.id }}</p>
+                <p>Created : {{ "now"|date("m/d/Y") }}</p>
+                <p>Due : {{ command.dueDate ? command.dueDate|date('Y-m-d') : '' }}</p>
+            </div>
+        </header>   
+        <div class="infos">
+            <div>
+                <h2>{{ company.name }}</h2>
+                <h2>{{ company.address }}</h2>
+            </div>
+            <div>
+                <h2>{{ command.clientFirstname }}</h2>
+                <h2>{{ command.clientLastname }}</h2>
+            </div>
+        </div>  
+        <table>
+            <thead>
+                <tr>
+                    <th>Payment Method</th>
+                    {% for payment in command.payments %}
+                    <th>{{ payment.type }}#</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for payment in command.payments %}
+                    <td>{{ payment.type }}</td>
+                    <td>{{ payment.amount }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table> 
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in command.products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>${{ product.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>  
+        <h2>Total : ${{command.getTotal()}}</h2>
+
+    </body>
+</html>

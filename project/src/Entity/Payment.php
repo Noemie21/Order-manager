@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PaymentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PaymentRepository::class)
@@ -24,6 +25,11 @@ class Payment
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 180,
+     *      notInRangeMessage = "You must be between {{ min }} and {{ max }}",
+     * )
      */
     private $amount;
 
@@ -72,5 +78,9 @@ class Payment
         $this->command = $command;
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->type;
     }
 }
