@@ -4,13 +4,18 @@ namespace App\Controller;
 
 use App\Entity\Command;
 use App\Form\CommandFormType;
+use App\Entity\Company;
 use App\Repository\CommandRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mime\Email;
+use Knp\Snappy\Pdf;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 
 #[Route('/command')]
 class CommandController extends AbstractController
@@ -24,7 +29,7 @@ class CommandController extends AbstractController
     }
 
     #[Route('/new', name: 'command_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, \Knp\Snappy\Pdf $knpSnappyPdf, Company $company): Response
     {
         $command = new Command();
         $form = $this->createForm(CommandFormType::class, $command);
@@ -35,8 +40,33 @@ class CommandController extends AbstractController
             $entityManager->persist($command);
             $entityManager->flush();
 
+            /*$email = (new Email())
+            ->from('hello@example.com')
+            ->to($command->getClientMail())
+            ->subject('Facture')
+            ->text('Sending emails is fun again!')
+            ->html('<p>See Twig integration for better HTML integration!</p>');
+
+            $mailer->send($email);
+
+            return $this->json([
+                'status'=> 200,
+                'message'=> 'invoice sent'
+            ]);*/
+
+            $html = $this->renderView('facture/facture.html.twig', array(
+                'command' => $command,
+                'company' => $company,
+            ));
+            //dd('ok');
+            return new PdfResponse(
+                $knpSnappyPdf->getOutputFromHtml($html),
+                'file.pdf'
+            );
+
             return $this->redirectToRoute('command_index', [], Response::HTTP_SEE_OTHER);
         }
+
 
         return $this->renderForm('command/new.html.twig', [
             'command' => $command,

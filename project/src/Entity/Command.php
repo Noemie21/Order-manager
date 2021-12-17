@@ -41,6 +41,11 @@ class Command
     private $clientPhoneNumber;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $clientMail;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $dueDate;
@@ -119,6 +124,18 @@ class Command
         return $this;
     }
 
+    public function getClientMail(): ?string
+    {
+        return $this->clientMail;
+    }
+
+    public function setClientMail(string $clientMail): self
+    {
+        $this->clientMail = $clientMail;
+
+        return $this;
+    }
+
     public function getDueDate(): ?\DateTimeInterface
     {
         return $this->dueDate;
@@ -141,6 +158,10 @@ class Command
         $this->status = $status;
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->id;
     }
 
     /**
