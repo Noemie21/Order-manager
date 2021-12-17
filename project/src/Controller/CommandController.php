@@ -124,9 +124,11 @@ class CommandController extends AbstractController
     {
         if ($command->getTotalPaid() == $command->getTotal()) {
             $command->setStatus('Payée');
+            $this->getDoctrine()->getManager()->flush();
         }
-        if ($command->getDueDate() >  date_default_timezone_get()) {
+        if ($command->getDueDate() <  date_default_timezone_get()) {
             $command->setStatus('Retard');
+            $this->getDoctrine()->getManager()->flush();
         }
         return $this->render('command/show.html.twig', [
             'command' => $command,
