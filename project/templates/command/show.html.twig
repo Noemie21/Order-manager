@@ -49,5 +49,12 @@
     <p><b>{{product.name}}</b> : {{product.price}} €</p>
     {% endfor %}
 
-    <h2>{{command.getTotal()}} €</h2>
+    <h2>TOTAL : {{command.getTotal()}} €</h2>
+
+    <h2>Payments</h2>
+    {% for payment in command.payments %}
+    <p><b>{{payment.type}}</b> : {{payment.amount}} €</p>
+    {% endfor %}
+
+    <h2>TOTAL : {{command.getTotalPaid()}} €</h2>
 {% endblock %}

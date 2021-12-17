@@ -229,4 +229,16 @@ class Command
         }
         return $total;
     }
+
+    /**
+     * @return Collection|Payment[]
+     */
+    public function getTotalPaid(): ?int
+    {
+        $total = 0;
+        foreach ($this->payments as $payment) {
+            $total += $payment->getAmount();
+        }
+        return $total;
+    }
 }

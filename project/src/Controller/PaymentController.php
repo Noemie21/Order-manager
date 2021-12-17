@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Command;
 use App\Entity\Payment;
 use App\Form\PaymentType;
 use App\Repository\PaymentRepository;
@@ -28,8 +29,12 @@ class PaymentController extends AbstractController
         $payment = new Payment();
         $form = $this->createForm(PaymentType::class, $payment);
         $form->handleRequest($request);
+        $command = $payment->getCommand();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($command->getTotalPaid() == $command->getTotal()) {
+                $command->setStatus('Payée');
+            }
             $entityManager->persist($payment);
             $entityManager->flush();
 

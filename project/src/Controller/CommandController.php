@@ -73,7 +73,7 @@ class CommandController extends AbstractController
     }
 
     #[Route('/new', name: 'command_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, \Knp\Snappy\Pdf $knpSnappyPdf, Company $company): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $command = new Command();
         $form = $this->createForm(CommandFormType::class, $command);
@@ -96,7 +96,7 @@ class CommandController extends AbstractController
             return $this->json([
                 'status'=> 200,
                 'message'=> 'invoice sent'
-            ]);*/
+            ]);
 
             $html = $this->renderView('facture/facture.html.twig', array(
                 'command' => $command,
@@ -107,6 +107,7 @@ class CommandController extends AbstractController
                 $knpSnappyPdf->getOutputFromHtml($html),
                 'file.pdf'
             );
+            */
 
             return $this->redirectToRoute('command_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -121,6 +122,9 @@ class CommandController extends AbstractController
     #[Route('/{id}', name: 'command_show', methods: ['GET'])]
     public function show(Command $command, ProductRepository $productRepository): Response
     {
+        if ($command->getTotalPaid() == $command->getTotal()) {
+            $command->setStatus('Payée');
+        }
         return $this->render('command/show.html.twig', [
             'command' => $command,
         ]);

@@ -16,6 +16,7 @@ class CommandFormType extends AbstractType
             ->add('clientLastname')
             ->add('clientAddress')
             ->add('clientPhoneNumber')
+            ->add('clientMail')
             ->add('dueDate')
             ->add('products')
             ->add('payments')
