@@ -18,8 +18,8 @@
             <imgsrc={{ images_directory ~ company.logo}}><br>
             <div>
                 <p>Invoice #: {{ command.id }}</p>
-                <p>Created : {{ "now"|date("m/d/Y") }}</p>
-                <p>Due : {{ command.dueDate ? command.dueDate|date('Y-m-d') : '' }}</p>
+                <p>Created : {{ "now"|date("d/m/Y") }}</p>
+                <p>Due : {{ command.dueDate ? command.dueDate|date('d/m/Y') : '' }}</p>
             </div>
         </header>   
         <div class="infos">

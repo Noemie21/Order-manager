@@ -29,7 +29,7 @@
             </tr>
             <tr>
                 <th>DueDate</th>
-                <td>{{ command.dueDate ? command.dueDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ command.dueDate ? command.dueDate|date('d/m/Y') : '' }}</td>
             </tr>
             <tr>
                 <th>Status</th>
@@ -39,6 +39,10 @@
     </table>
     {% if command.status == 'Non-traitée' %}
     <h3><a href="{{ path('send_facture', {'id': command.id}) }}">envoyer facture</a></h3>
+    {% endif %}
+
+    {% if command.status == 'Retard' %}
+    <h3>relancer</h3>
     {% endif %}
 
     <a href="{{ path('command_index') }}">back to list</a>
