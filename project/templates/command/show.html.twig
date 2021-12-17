@@ -37,6 +37,9 @@
             </tr>
         </tbody>
     </table>
+    {% if command.status == 'Non-traitée' %}
+    <h3><a href="{{ path('send_facture', {'id': command.id}) }}">envoyer facture</a></h3>
+    {% endif %}
 
     <a href="{{ path('command_index') }}">back to list</a>
 

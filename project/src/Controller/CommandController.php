@@ -147,6 +147,14 @@ class CommandController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('/{id}/sendfacture', name: 'send_facture', methods: ['GET', 'POST'])]
+    public function sendfacture(Request $request, Command $command, EntityManagerInterface $entityManager): Response
+    {
+        $command->setStatus('Traitée');
+        $this->getDoctrine()->getManager()->flush();
+        return $this->redirectToRoute('command_show', ['id' => $command->getId()], Response::HTTP_SEE_OTHER);
+    }
+
 
     #[Route('/{id}', name: 'command_delete', methods: ['POST'])]
     public function delete(Request $request, Command $command, EntityManagerInterface $entityManager): Response
