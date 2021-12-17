@@ -42,7 +42,7 @@
     {% endif %}
 
     {% if command.status == 'Retard' %}
-    <h3>relancer</h3>
+    <h3><a href="{{ path('relancer', {'id': command.id}) }}">relancer</a></h3>
     {% endif %}
 
     <a href="{{ path('command_index') }}">back to list</a>

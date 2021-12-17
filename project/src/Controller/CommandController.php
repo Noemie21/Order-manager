@@ -84,16 +84,7 @@ class CommandController extends AbstractController
             $entityManager->persist($command);
             $entityManager->flush();
 
-            /*$email = (new Email())
-            ->from('hello@example.com')
-            ->to($command->getClientMail())
-            ->subject('Facture')
-            ->text('Sending emails is fun again!')
-            ->html('<p>See Twig integration for better HTML integration!</p>');
-
-            $mailer->send($email);
-
-            return $this->json([
+            /*return $this->json([
                 'status'=> 200,
                 'message'=> 'invoice sent'
             ]);
@@ -136,13 +127,22 @@ class CommandController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'command_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Command $command, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Command $command, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
         $form = $this->createForm(CommandFormType::class, $command);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $email = (new Email())
+            ->from('hello@example.com')
+            ->to($command->getClientMail())
+            ->subject('Commande modifiée')
+            ->text('Sending emails is fun again!')
+            ->html('<p>Commande modifiée !  Voici votre nouvelle facture</p>');
+
+            $mailer->send($email);
 
             return $this->redirectToRoute('command_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -153,10 +153,33 @@ class CommandController extends AbstractController
         ]);
     }
     #[Route('/{id}/sendfacture', name: 'send_facture', methods: ['GET', 'POST'])]
-    public function sendfacture(Request $request, Command $command, EntityManagerInterface $entityManager): Response
+    public function sendfacture(Request $request, Command $command, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
         $command->setStatus('Traitée');
         $this->getDoctrine()->getManager()->flush();
+
+        $email = (new Email())
+            ->from('hello@example.com')
+            ->to($command->getClientMail())
+            ->subject('Commande Traitée')
+            ->text('Sending emails is fun again!')
+            ->html('<p>Commande Traitée !  Voici votre facture</p>');
+
+            $mailer->send($email);
+        return $this->redirectToRoute('command_show', ['id' => $command->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/relancer', name: 'relancer', methods: ['GET', 'POST'])]
+    public function relancer(Request $request, Command $command, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        $email = (new Email())
+            ->from('hello@example.com')
+            ->to($command->getClientMail())
+            ->subject('Toc toc toc ! Vous êtes en retard')
+            ->text('Sending emails is fun again!')
+            ->html('<p>Commande en retard !  Voici votre facture, veuillez la régler svp</p>');
+
+        $mailer->send($email);
         return $this->redirectToRoute('command_show', ['id' => $command->getId()], Response::HTTP_SEE_OTHER);
     }
 
